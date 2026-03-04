@@ -70,9 +70,6 @@ Admin Dashboard and Leaderboard
 
 Installation and Setup
 
-Clone the repository
-git clone https://github.com/yourusername/digital-profile-verification-system.git
-
 Install backend dependencies
 cd backend
 npm install
