@@ -29,7 +29,7 @@ A modern full-stack web application that streamlines the recruitment process by 
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | React.js 19, Vite, Tailwind CSS, Framer Motion |
+| **Frontend** | React.js 19, Vite, Tailwind CSS |
 | **Backend** | Node.js, Express.js 5 |
 | **Database** | MongoDB Atlas (Cloud) |
 | **Auth** | JWT (JSON Web Tokens) + bcryptjs |
