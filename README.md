@@ -59,7 +59,7 @@ npm install
 Create a `.env` file in the `backend/` folder (use `.env.example` as reference):
 ```env
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/digital_verif_system
+MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret_key
 GITHUB_TOKEN=your_github_personal_access_token
 ```
@@ -82,17 +82,6 @@ npm run dev
 ```
 
 App runs at: `http://localhost:5173`
-
----
-
-## 🔑 Default Admin Credentials
-
-| Field | Value |
-|-------|-------|
-| Email | `admin@company.com` |
-| Password | `adminpassword` |
-
-> ⚠️ Change these in `seedAdmin.js` before deploying to production.
 
 ---
 
@@ -129,19 +118,8 @@ digital_profile_verification_system/
 ### Environment Variables
 
 **Render (Backend):**
-```
-MONGO_URI=your_mongodb_atlas_uri
-JWT_SECRET=your_secret
-GITHUB_TOKEN=your_github_pat
-FRONTEND_URL=https://digital-profile-verification-system.vercel.app
-```
 
 **Vercel (Frontend):**
-```
-VITE_API_URL=https://digital-profile-verification-system.onrender.com/api
-```
-
----
 
 ## 📸 Pages
 
@@ -150,7 +128,7 @@ VITE_API_URL=https://digital-profile-verification-system.onrender.com/api
 | Landing Page | `/` | Public |
 | Student Registration | `/register` | Public |
 | Status Check | `/status` | Public |
-| Admin Login | `/admin` | Public |
+| Admin Login | `/admin` | Private |
 | Admin Dashboard | `/admin/dashboard` | Protected |
 
 ---
