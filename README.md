@@ -81,7 +81,7 @@ npm install
 npm run dev
 ```
 
-App runs at: `http://localhost:5173`
+App runs at: `http://localhost:5000`
 
 ---
 
@@ -117,9 +117,9 @@ digital_profile_verification_system/
 
 ### Environment Variables
 
-**Render (Backend):**
+**Render (Backend)**
 
-**Vercel (Frontend):**
+**Vercel (Frontend)**
 
 ## 📸 Pages
 
@@ -138,5 +138,3 @@ digital_profile_verification_system/
 MIT License — feel free to use and modify.
 
 ---
-
-<p align="center">Made with ❤️ for streamlined recruitment verification</p>
