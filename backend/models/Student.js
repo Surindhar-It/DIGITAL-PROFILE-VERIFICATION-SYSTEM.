@@ -50,6 +50,10 @@ const StudentSchema = new mongoose.Schema({
     submittedAt: {
         type: Date,
         default: Date.now
+    },
+    statsLastRefreshed: {
+        type: Date,
+        default: null
     }
 });
 

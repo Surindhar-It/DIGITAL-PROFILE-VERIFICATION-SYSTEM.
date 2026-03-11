@@ -21,11 +21,11 @@ const AdminLogin = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen relative">
-            <Link to="/" className="absolute top-4 right-4 md:top-8 md:right-8 text-slate-400 hover:text-white flex items-center gap-2 transition bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700/50">
+            <Link to="/" className="absolute top-4 right-4 md:top-8 md:right-8 text-red-600 font-bold dark:text-slate-400 hover:text-red-700 dark:hover:text-white flex items-center gap-2 transition bg-white dark:bg-slate-800/50 px-4 py-2 rounded-xl border border-red-200 dark:border-slate-700/50 shadow-sm hover:shadow-md">
                 Exit to Home
             </Link>
             <div className="glass-card p-8 rounded-xl w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center text-white">Admin Login</h2>
+                <h2 className="text-3xl font-extrabold mb-6 text-center text-slate-900 dark:text-white">Admin Login</h2>
                 {error && <p className="text-red-400 mb-4 text-center">{error}</p>}
                 <form onSubmit={handleLogin} className="space-y-4">
                     <input

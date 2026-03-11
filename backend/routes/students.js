@@ -6,6 +6,7 @@ const Joi = require('joi');
 const { getLeetCodeStats, extractLeetCodeUsername } = require('../utils/leetcodeHelper');
 const { getGitHubStats, extractGitHubUsername } = require('../utils/githubHelper');
 const { getCodeChefStats, extractCodeChefUsername } = require('../utils/codechefHelper');
+const { getCodeforcesStats, extractCodeforcesUsername } = require('../utils/codeforcesHelper');
 const bcrypt = require('bcryptjs');
 
 // @route   POST api/students/submit
@@ -97,6 +98,20 @@ router.post('/submit', async (req, res) => {
                     }
                 }
 
+                // Fetch Codeforces Stats (Resubmission)
+                if (profiles && profiles.codeforces) {
+                    const codeforcesUsername = extractCodeforcesUsername(profiles.codeforces);
+                    if (codeforcesUsername) {
+                        const stats = await getCodeforcesStats(codeforcesUsername);
+                        if (stats) {
+                            student.codeforcesStats = stats;
+                            if (!student.scores) student.scores = {};
+                            student.scores.codeforces = stats.rating || stats.solved; // Use rating if available, else solved count
+                            student.scores.total = (student.scores.leetcode || 0) + (student.scores.codechef || 0) + (student.scores.github || 0) + (student.scores.codeforces || 0);
+                        }
+                    }
+                }
+
                 await student.save();
                 return res.json(student);
             } else {
@@ -148,6 +163,20 @@ router.post('/submit', async (req, res) => {
                     if (!student.scores) student.scores = {};
                     student.scores.codechef = stats.rating;
                     student.scores.total = (student.scores.leetcode || 0) + (student.scores.codeforces || 0) + (student.scores.github || 0) + stats.rating;
+                }
+            }
+        }
+
+        // Fetch Codeforces Stats
+        if (req.body.profiles && req.body.profiles.codeforces) {
+            const codeforcesUsername = extractCodeforcesUsername(req.body.profiles.codeforces);
+            if (codeforcesUsername) {
+                const stats = await getCodeforcesStats(codeforcesUsername);
+                if (stats) {
+                    student.codeforcesStats = stats;
+                    if (!student.scores) student.scores = {};
+                    student.scores.codeforces = stats.rating || stats.solved;
+                    student.scores.total = (student.scores.leetcode || 0) + (student.scores.codechef || 0) + (student.scores.github || 0) + (student.scores.codeforces || 0);
                 }
             }
         }

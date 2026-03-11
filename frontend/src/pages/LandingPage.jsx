@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
+
+import ThemeToggle from '../components/ThemeToggle';
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#0B0F19]">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-white dark:bg-[#0B0F19] transition-colors duration-300">
+            {/* Theme Toggle Button */}
+            <div className="absolute top-4 right-4 md:top-8 md:right-8 z-50">
+                <ThemeToggle />
+            </div>
+
             <motion.div
                 initial={{ y: -10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -13,14 +19,13 @@ const LandingPage = () => {
             >
                 {/* Logo & Title */}
                 <div className="mb-12">
-                    <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20">
+                    <div className="mx-auto w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-indigo-500/20 dark:shadow-blue-500/30">
                         <ShieldCheck className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">
                         Digital Profile Verification System
-
                     </h1>
-                    <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                    <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto transition-colors font-medium">
                         Secure Recruitment Verification Portal for Students and Administrators
                     </p>
                 </div>
@@ -28,35 +33,35 @@ const LandingPage = () => {
                 {/* Cards Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
                     {/* Student Card */}
-                    <div className="bg-[#131620] border border-slate-800 p-8 rounded-2xl hover:border-blue-500/30 transition duration-300 text-left flex flex-col h-full">
-                        <h3 className="text-xl font-bold text-white mb-2">Student Portal</h3>
-                        <p className="text-slate-400 mb-8 text-sm flex-grow">Submit your profile details or check your current verification status.</p>
+                    <div className="bg-white dark:bg-[#131620] border border-indigo-100 dark:border-slate-800 shadow-xl shadow-indigo-100 dark:shadow-none p-8 rounded-2xl hover:border-indigo-300 dark:hover:border-blue-500/50 transition duration-300 text-left flex flex-col h-full relative overflow-hidden group">
+                        <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2 transition-colors relative z-10">Student Portal</h3>
+                        <p className="text-slate-600 dark:text-slate-400 mb-8 text-base flex-grow transition-colors relative z-10 font-medium">Submit your profile details or check your current verification status.</p>
 
-                        <div className="flex flex-col gap-3 mt-auto">
-                            <Link to="/register" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl text-sm font-semibold transition shadow-lg shadow-blue-600/10">
+                        <div className="flex flex-col gap-3 mt-auto relative z-10">
+                            <Link to="/register" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-base font-bold transition shadow-lg shadow-blue-500/20">
                                 New Registration
                             </Link>
-                            <Link to="/status" className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-center py-3 rounded-xl text-sm font-semibold transition border border-slate-700">
+                            <Link to="/status" className="w-full bg-indigo-50 hover:bg-indigo-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-indigo-900 dark:text-slate-200 text-center py-3.5 rounded-xl text-base font-bold transition border border-indigo-200 dark:border-slate-700">
                                 Check Status
                             </Link>
                         </div>
                     </div>
 
                     {/* Admin Card */}
-                    <div className="bg-[#131620] border border-slate-800 p-8 rounded-2xl hover:border-blue-500/30 transition duration-300 text-left flex flex-col h-full">
-                        <h3 className="text-xl font-bold text-white mb-2">Admin Portal</h3>
-                        <p className="text-slate-400 mb-8 text-sm flex-grow">Restricted access for recruitment officers to verify submissions.</p>
+                    <div className="bg-white dark:bg-[#131620] border border-indigo-100 dark:border-slate-800 shadow-xl shadow-indigo-100 dark:shadow-none p-8 rounded-2xl hover:border-indigo-300 dark:hover:border-blue-500/50 transition duration-300 text-left flex flex-col h-full relative overflow-hidden group">
+                        <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2 transition-colors relative z-10">Admin Portal</h3>
+                        <p className="text-slate-600 dark:text-slate-400 mb-8 text-base flex-grow transition-colors relative z-10 font-medium">Restricted access for recruitment officers to verify submissions.</p>
 
-                        <div className="flex flex-col gap-3 mt-auto">
-                            <Link to="/admin" className="w-full bg-white text-slate-900 hover:bg-slate-100 text-center py-3 rounded-xl text-sm font-bold transition shadow-lg">
+                        <div className="flex flex-col gap-3 mt-auto relative z-10">
+                            <Link to="/admin" className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 text-center py-3.5 rounded-xl text-base font-extrabold transition shadow-lg shadow-slate-900/20 dark:shadow-white/20">
                                 Login as Admin
                             </Link>
-                            <div className="py-3 hidden md:block"></div> {/* Spacer to match height */}
+                            <div className="py-3.5 hidden md:block"></div> {/* Spacer to match height */}
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-16 text-slate-500 text-sm">
+                <div className="mt-16 text-slate-500 dark:text-slate-500 text-sm transition-colors">
                     &copy; 2026 Verification System. All rights reserved.
                 </div>
             </motion.div>

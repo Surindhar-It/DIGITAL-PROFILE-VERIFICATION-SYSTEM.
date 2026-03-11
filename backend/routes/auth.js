@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
 
     try {
         let admin = await Admin.findOne({ email });
-        const headerCode = req.header('x-admin-create-code'); 
+        const headerCode = req.header('x-admin-create-code');
         if (!admin && headerCode === 'secret_admin_code_123') {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
@@ -39,6 +39,13 @@ router.post('/login', async (req, res) => {
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
+
+            // Trigger a background stats refresh when admin logs in
+            const { runDailyRefresh } = require('../utils/dailyRefresh');
+            setImmediate(() => {
+                console.log(`[Admin Login] Triggering background stats refresh...`);
+                runDailyRefresh();
+            });
         });
 
     } catch (err) {
