@@ -62,10 +62,6 @@ const LandingPage = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className="mt-16 text-slate-500 dark:text-slate-500 text-sm transition-colors">
-                    &copy; 2026 Verification System. All rights reserved.
-                </div>
             </motion.div>
         </div>
     );
