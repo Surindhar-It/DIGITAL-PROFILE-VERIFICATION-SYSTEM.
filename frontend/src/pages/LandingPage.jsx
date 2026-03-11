@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 
 import ThemeToggle from '../components/ThemeToggle';
 

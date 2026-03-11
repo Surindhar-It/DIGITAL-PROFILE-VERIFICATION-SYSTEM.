@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../api/axios';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 import { CheckCircle, XCircle, Clock, ExternalLink, User, Book, Hash, Phone, Mail, Award, BarChart2, Github, Code, Terminal, Cpu, Trophy } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 

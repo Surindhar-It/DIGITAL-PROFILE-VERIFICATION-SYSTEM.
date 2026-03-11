@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 import * as XLSX from 'xlsx';
 import { Github, Linkedin, Code, Terminal, Cpu, ExternalLink, BarChart2, ChevronDown, Info, X } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
