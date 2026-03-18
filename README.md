@@ -128,7 +128,7 @@ digital_profile_verification_system/
 | Landing Page | `/` | Public |
 | Student Registration | `/register` | Public |
 | Status Check | `/status` | Public |
-| Admin Login | `/admin` | Private |
+| Admin Login | `/admin` | Public |
 | Admin Dashboard | `/admin/dashboard` | Protected |
 
 ---
