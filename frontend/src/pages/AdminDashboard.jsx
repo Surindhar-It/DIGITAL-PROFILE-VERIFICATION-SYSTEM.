@@ -124,6 +124,11 @@ const AdminDashboard = () => {
     const [showExportOptions, setShowExportOptions] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
 
+    // Search Filter States for Verified Page
+    const [searchRollNo, setSearchRollNo] = useState('');
+    const [searchName, setSearchName] = useState('');
+    const [searchDept, setSearchDept] = useState('');
+
     // Hardcoded Mock Data for Leaderboard (Frontend Only)
 
     // ...
@@ -156,7 +161,21 @@ const AdminDashboard = () => {
         }
 
         // Standard filtering for other views
-        return filter === 'All' ? students : students.filter(s => filter === 'All' ? true : s.status === filter);
+        let processed = filter === 'All' ? students : students.filter(s => filter === 'All' ? true : s.status === filter);
+
+        if (filter === 'Verified') {
+            if (searchRollNo) {
+                processed = processed.filter(s => s.regNo && s.regNo.toLowerCase().includes(searchRollNo.toLowerCase()));
+            }
+            if (searchName) {
+                processed = processed.filter(s => s.name && s.name.toLowerCase().includes(searchName.toLowerCase()));
+            }
+            if (searchDept) {
+                processed = processed.filter(s => s.dept && s.dept.toLowerCase().includes(searchDept.toLowerCase()));
+            }
+        }
+
+        return processed;
     };
 
     const filteredStudents = getProcessedStudents();
@@ -416,6 +435,35 @@ const AdminDashboard = () => {
                         </div>
                     )}
                 </div>
+
+                {filter === 'Verified' && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 animate-fade-in-up">
+                        <input
+                            type="text"
+                            placeholder="Roll No."
+                            value={searchRollNo}
+                            onChange={(e) => setSearchRollNo(e.target.value)}
+                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Student Name"
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        />
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="Department"
+                                value={searchDept}
+                                onChange={(e) => setSearchDept(e.target.value)}
+                                className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all pr-10"
+                            />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg select-none">+</div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="glass-card rounded-3xl overflow-hidden overflow-x-auto bg-white dark:bg-[#131620] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
                     <table className="w-full text-left">
