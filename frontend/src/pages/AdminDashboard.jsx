@@ -181,6 +181,15 @@ const AdminDashboard = () => {
             }
         }
 
+        // Sort alphabetically by name
+        processed.sort((a, b) => {
+            const nameA = a.name ? a.name.toLowerCase() : '';
+            const nameB = b.name ? b.name.toLowerCase() : '';
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+        });
+
         return processed;
     };
 
