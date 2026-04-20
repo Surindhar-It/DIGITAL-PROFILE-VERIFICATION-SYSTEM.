@@ -11,6 +11,7 @@ const { getLeetCodeStats, extractLeetCodeUsername } = require('./leetcodeHelper'
 const { getGitHubStats, extractGitHubUsername } = require('./githubHelper');
 const { getCodeChefStats, extractCodeChefUsername } = require('./codechefHelper');
 const { getCodeforcesStats, extractCodeforcesUsername } = require('./codeforcesHelper');
+const { getHackerrankStats, extractHackerrankUsername } = require('./hackerrankHelper');
 
 /**
  * Refreshes LeetCode, GitHub, and CodeChef stats for a single student.
@@ -101,8 +102,28 @@ const refreshStudentStats = async (student) => {
         }
     }
 
+    // --- HackerRank ---
+    if (student.profiles && student.profiles.hackerrank) {
+        const username = extractHackerrankUsername(student.profiles.hackerrank);
+        if (username) {
+            try {
+                const stats = await getHackerrankStats(username);
+                if (stats) {
+                    let hrDoc = student.hackerrankStats || new HackerrankStatus();
+                    Object.assign(hrDoc, stats);
+                    await hrDoc.save();
+                    student.hackerrankStats = hrDoc._id;
+                    scoreDoc.hackerrank = stats.badges;
+                    result.updated.push(`HackerRank (${stats.badges} badges)`);
+                }
+            } catch (err) {
+                result.errors.push(`HackerRank: ${err.message}`);
+            }
+        }
+    }
+
     // Recalculate total score
-    scoreDoc.total = (scoreDoc.leetcode || 0) + (scoreDoc.github || 0) + (scoreDoc.codechef || 0) + (scoreDoc.codeforces || 0);
+    scoreDoc.total = (scoreDoc.leetcode || 0) + (scoreDoc.github || 0) + (scoreDoc.codechef || 0) + (scoreDoc.codeforces || 0) + (scoreDoc.hackerrank || 0);
 
     // Track when stats were last refreshed
     student.statsLastRefreshed = new Date();
@@ -126,13 +147,14 @@ const runDailyRefresh = async () => {
                 { leetcode: { $exists: true, $ne: '' } },
                 { github: { $exists: true, $ne: '' } },
                 { codechef: { $exists: true, $ne: '' } },
-                { codeforces: { $exists: true, $ne: '' } }
+                { codeforces: { $exists: true, $ne: '' } },
+                { hackerrank: { $exists: true, $ne: '' } }
             ]
         });
         const profileIds = profilesWithLinks.map(p => p._id);
 
         const students = await StudentPersonal.find({ profiles: { $in: profileIds } })
-            .populate('profiles leetcodeStats githubStats codechefStats codeforcesStats scores');
+            .populate('profiles leetcodeStats githubStats codechefStats codeforcesStats hackerrankStats scores');
 
         console.log(`[Daily Refresh] Found ${students.length} students to update.`);
 
@@ -184,4 +206,4 @@ const scheduleDailyRefresh = () => {
     console.log(`[Daily Refresh] Scheduled. Cron: "${cronExpression}" (Timezone: ${process.env.REFRESH_TIMEZONE || 'Asia/Kolkata'})`);
 };
 
-module.exports = { scheduleDailyRefresh, runDailyRefresh };
+module.exports = { scheduleDailyRefresh, runDailyRefresh, refreshStudentStats };
