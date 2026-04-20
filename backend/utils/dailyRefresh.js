@@ -1,5 +1,12 @@
 const cron = require('node-cron');
-const Student = require('../models/Student');
+const StudentPersonal = require('../models/StudentPersonal');
+const Profile = require('../models/Profile');
+const LeetcodeStatus = require('../models/LeetcodeStatus');
+const GithubStatus = require('../models/GithubStatus');
+const CodechefStatus = require('../models/CodechefStatus');
+const CodeforcesStatus = require('../models/CodeforcesStatus');
+const Score = require('../models/Score');
+
 const { getLeetCodeStats, extractLeetCodeUsername } = require('./leetcodeHelper');
 const { getGitHubStats, extractGitHubUsername } = require('./githubHelper');
 const { getCodeChefStats, extractCodeChefUsername } = require('./codechefHelper');
@@ -11,7 +18,8 @@ const { getCodeforcesStats, extractCodeforcesUsername } = require('./codeforcesH
  */
 const refreshStudentStats = async (student) => {
     const result = { id: student._id, name: student.name, updated: [], errors: [] };
-    let scores = student.scores ? { ...student.scores.toObject ? student.scores.toObject() : student.scores } : {};
+    
+    let scoreDoc = student.scores || new Score();
 
     // --- LeetCode ---
     if (student.profiles && student.profiles.leetcode) {
@@ -20,8 +28,11 @@ const refreshStudentStats = async (student) => {
             try {
                 const stats = await getLeetCodeStats(username);
                 if (stats) {
-                    student.leetcodeStats = stats;
-                    scores.leetcode = stats.total;
+                    let lcDoc = student.leetcodeStats || new LeetcodeStatus();
+                    Object.assign(lcDoc, stats);
+                    await lcDoc.save();
+                    student.leetcodeStats = lcDoc._id;
+                    scoreDoc.leetcode = stats.total;
                     result.updated.push(`LeetCode (${stats.total} solved)`);
                 }
             } catch (err) {
@@ -37,8 +48,11 @@ const refreshStudentStats = async (student) => {
             try {
                 const stats = await getGitHubStats(username);
                 if (stats) {
-                    student.githubStats = stats;
-                    scores.github = stats.public_repos;
+                    let ghDoc = student.githubStats || new GithubStatus();
+                    Object.assign(ghDoc, stats);
+                    await ghDoc.save();
+                    student.githubStats = ghDoc._id;
+                    scoreDoc.github = stats.public_repos;
                     result.updated.push(`GitHub (${stats.public_repos} repos)`);
                 }
             } catch (err) {
@@ -54,8 +68,11 @@ const refreshStudentStats = async (student) => {
             try {
                 const stats = await getCodeChefStats(username);
                 if (stats) {
-                    student.codechefStats = stats;
-                    scores.codechef = stats.rating;
+                    let ccDoc = student.codechefStats || new CodechefStatus();
+                    Object.assign(ccDoc, stats);
+                    await ccDoc.save();
+                    student.codechefStats = ccDoc._id;
+                    scoreDoc.codechef = stats.rating;
                     result.updated.push(`CodeChef (rating: ${stats.rating})`);
                 }
             } catch (err) {
@@ -71,8 +88,11 @@ const refreshStudentStats = async (student) => {
             try {
                 const stats = await getCodeforcesStats(username);
                 if (stats) {
-                    student.codeforcesStats = stats;
-                    scores.codeforces = stats.rating || stats.solved;
+                    let cfDoc = student.codeforcesStats || new CodeforcesStatus();
+                    Object.assign(cfDoc, stats);
+                    await cfDoc.save();
+                    student.codeforcesStats = cfDoc._id;
+                    scoreDoc.codeforces = stats.rating || stats.solved;
                     result.updated.push(`Codeforces (${stats.rating ? `rating: ${stats.rating}` : `${stats.solved} solved`})`);
                 }
             } catch (err) {
@@ -82,11 +102,13 @@ const refreshStudentStats = async (student) => {
     }
 
     // Recalculate total score
-    scores.total = (scores.leetcode || 0) + (scores.github || 0) + (scores.codechef || 0) + (scores.codeforces || 0);
-    student.scores = scores;
+    scoreDoc.total = (scoreDoc.leetcode || 0) + (scoreDoc.github || 0) + (scoreDoc.codechef || 0) + (scoreDoc.codeforces || 0);
 
     // Track when stats were last refreshed
     student.statsLastRefreshed = new Date();
+
+    await scoreDoc.save();
+    student.scores = scoreDoc._id;
 
     await student.save();
     return result;
@@ -99,14 +121,18 @@ const runDailyRefresh = async () => {
     console.log(`\n[Daily Refresh] Starting at ${new Date().toISOString()}`);
 
     try {
-        const students = await Student.find({
+        const profilesWithLinks = await Profile.find({
             $or: [
-                { 'profiles.leetcode': { $exists: true, $ne: '' } },
-                { 'profiles.github': { $exists: true, $ne: '' } },
-                { 'profiles.codechef': { $exists: true, $ne: '' } },
-                { 'profiles.codeforces': { $exists: true, $ne: '' } }
+                { leetcode: { $exists: true, $ne: '' } },
+                { github: { $exists: true, $ne: '' } },
+                { codechef: { $exists: true, $ne: '' } },
+                { codeforces: { $exists: true, $ne: '' } }
             ]
         });
+        const profileIds = profilesWithLinks.map(p => p._id);
+
+        const students = await StudentPersonal.find({ profiles: { $in: profileIds } })
+            .populate('profiles leetcodeStats githubStats codechefStats codeforcesStats scores');
 
         console.log(`[Daily Refresh] Found ${students.length} students to update.`);
 

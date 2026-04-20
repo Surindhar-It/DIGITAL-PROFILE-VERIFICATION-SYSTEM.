@@ -70,7 +70,6 @@ const StudentDetailsModal = ({ student, onClose }) => {
                             <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm dark:shadow-none">
                                 <div className="flex items-center gap-2 mb-2 text-blue-600 dark:text-blue-400 font-bold"><BarChart2 size={18} /> Codeforces</div>
                                 <div className="space-y-1 text-sm">
-                                    <div className="flex justify-between"><span>Solved:</span> <span className="text-slate-900 dark:text-white font-mono">{student.codeforcesStats?.solved || 0}</span></div>
                                     <div className="flex justify-between"><span>Rating:</span> <span className="text-yellow-600 dark:text-yellow-400 font-mono">{student.codeforcesStats?.rating || 'N/A'}</span></div>
                                 </div>
                             </div>
@@ -78,9 +77,17 @@ const StudentDetailsModal = ({ student, onClose }) => {
                             <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm dark:shadow-none">
                                 <div className="flex items-center gap-2 mb-2 text-orange-600 dark:text-orange-500 font-bold"><Cpu size={18} /> CodeChef</div>
                                 <div className="space-y-1 text-sm">
+                                    <div className="flex justify-between"><span>Problems Solved:</span> <span className="text-slate-900 dark:text-white font-mono">{student.codechefStats?.problemsSolved || 0}</span></div>
                                     <div className="flex justify-between"><span>Rating:</span> <span className="text-orange-600 dark:text-orange-400 font-mono font-bold">{student.codechefStats?.rating || 'N/A'}</span></div>
                                     <div className="flex justify-between"><span>Global Rank:</span> <span className="text-slate-600 dark:text-slate-300 font-mono">#{student.codechefStats?.globalRank || 'N/A'}</span></div>
                                     <div className="flex justify-between"><span>Stars:</span> <span className="text-yellow-600 dark:text-yellow-400 font-mono">{student.codechefStats?.stars || 0}★</span></div>
+                                </div>
+                            </div>
+                            {/* HackerRank */}
+                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm dark:shadow-none">
+                                <div className="flex items-center gap-2 mb-2 text-green-700 dark:text-green-400 font-bold"><Terminal size={18} /> HackerRank</div>
+                                <div className="space-y-1 text-sm">
+                                    <div className="flex justify-between"><span>Badges:</span> <span className="text-slate-900 dark:text-white font-mono">{student.hackerrankStats?.badges || 0}</span></div>
                                 </div>
                             </div>
                             {/* GitHub */}
@@ -436,7 +443,7 @@ const AdminDashboard = () => {
                     {filter === 'Leaderboard' && (
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 animate-fade-in-down">
                             <div className="flex space-x-2">
-                                {['LeetCode', 'CodeChef', 'Codeforces', 'GitHub'].map(subFilter => (
+                                {['LeetCode', 'CodeChef', 'Codeforces', 'GitHub', 'HackerRank'].map(subFilter => (
                                     <button
                                         key={subFilter}
                                         onClick={() => setLeaderboardFilter(subFilter)}
@@ -513,14 +520,18 @@ const AdminDashboard = () => {
                                         ) : leaderboardFilter === 'Codeforces' ? (
                                             <>
                                                 <th className="p-4 text-center">Profile Link</th>
-                                                <th className="p-4 text-center">Problems Solved</th>
                                                 <th className="p-4 text-center">Rating</th>
                                             </>
                                         ) : leaderboardFilter === 'CodeChef' ? (
                                             <>
                                                 <th className="p-4 text-center">Profile Link</th>
-                                                <th className="p-4 text-center">No of Contests</th>
+                                                <th className="p-4 text-center">Problems Solved</th>
                                                 <th className="p-4 text-center">Rating</th>
+                                            </>
+                                        ) : leaderboardFilter === 'HackerRank' ? (
+                                            <>
+                                                <th className="p-4 text-center">Profile Link</th>
+                                                <th className="p-4 text-center">Badges Completed</th>
                                             </>
                                         ) : (
                                             <>
@@ -592,7 +603,6 @@ const AdminDashboard = () => {
                                                         <td className="p-4 text-center">
                                                             <a href={student.profiles.codeforces} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">View Profile</a>
                                                         </td>
-                                                        <td className="p-4 text-center font-mono text-slate-900 dark:text-white">{student.codeforcesStats?.solved || 0}</td>
                                                         <td className="p-4 text-center font-mono font-bold text-yellow-600 dark:text-yellow-400">{student.codeforcesStats?.rating || 'N/A'}</td>
                                                     </>
                                                 ) : leaderboardFilter === 'CodeChef' ? (
@@ -600,8 +610,15 @@ const AdminDashboard = () => {
                                                         <td className="p-4 text-center">
                                                             <a href={student.profiles.codechef} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">View Profile</a>
                                                         </td>
-                                                        <td className="p-4 text-center font-mono text-slate-800 dark:text-white">{student.codechefStats?.contests || 0}</td>
+                                                        <td className="p-4 text-center font-mono text-slate-800 dark:text-white">{student.codechefStats?.problemsSolved || 0}</td>
                                                         <td className="p-4 text-center font-mono font-bold text-orange-600 dark:text-orange-400">{student.codechefStats?.rating || 'N/A'}</td>
+                                                    </>
+                                                ) : leaderboardFilter === 'HackerRank' ? (
+                                                    <>
+                                                        <td className="p-4 text-center">
+                                                            <a href={student.profiles.hackerrank} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">View Profile</a>
+                                                        </td>
+                                                        <td className="p-4 text-center font-mono text-slate-900 dark:text-white">{student.hackerrankStats?.badges || 0}</td>
                                                     </>
                                                 ) : (
                                                     <>

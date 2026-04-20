@@ -41,11 +41,18 @@ const getCodeChefStats = async (username) => {
         const countryRankMatch = html.match(/Country Rank:.*?<strong>(\d+)<\/strong>/s);
         const countryRank = countryRankMatch ? parseInt(countryRankMatch[1]) : 0;
 
+        // Parse Problems Solved (Fully Solved)
+        // Usually something like <h3>Fully Solved (15)</h3>
+        const solvedMatch = html.match(/class="rating-data-section problems-solved".*?<h3>[^<]*?\((\d+)\)[^<]*?<\/h3>/is) 
+                      || html.match(/Fully Solved \s*\((\d+)\)/is);
+        const problemsSolved = solvedMatch ? parseInt(solvedMatch[1]) : 0;
+
         return {
             rating,
             stars,
             globalRank,
             countryRank,
+            problemsSolved,
             username
         };
 

@@ -1,0 +1,77 @@
+{
+  "count": 13,
+  "sampleCount": 10,
+  "firstSample": {
+    "_id": "69e5b5d2d167aa2acc23679a",
+    "name": "Sample Student 1",
+    "email": "student1@example.com",
+    "phone": "9876543211",
+    "college": "KEC",
+    "dept": "IT",
+    "regNo": "7321396",
+    "status": "Verified",
+    "statsLastRefreshed": null,
+    "profiles": {
+      "_id": "69e5b5d2d167aa2acc236796",
+      "leetcode": "https://leetcode.com/user1",
+      "github": "https://github.com/user1gh",
+      "hackerrank": "https://hackerrank.com/user1",
+      "codechef": "https://codechef.com/users/user1cc",
+      "codeforces": "https://codeforces.com/profile/user1cf",
+      "linkedin": "https://linkedin.com/in/user1",
+      "__v": 0
+    },
+    "leetcodeStats": {
+      "_id": "69e5b5d0d167aa2acc23678c",
+      "easy": 145,
+      "medium": 116,
+      "hard": 29,
+      "total": 290,
+      "__v": 0
+    },
+    "githubStats": {
+      "_id": "69e5b5d1d167aa2acc23678e",
+      "username": "user1gh",
+      "public_repos": 14,
+      "followers": 0,
+      "following": 22,
+      "__v": 0
+    },
+    "codechefStats": {
+      "_id": "69e5b5d1d167aa2acc236790",
+      "username": "user1cc",
+      "rating": 1734,
+      "stars": 2,
+      "globalRank": 12541,
+      "countryRank": 7187,
+      "problemsSolved": 447,
+      "__v": 0
+    },
+    "codeforcesStats": {
+      "_id": "69e5b5d1d167aa2acc236792",
+      "handle": "user1cf",
+      "rating": 1216,
+      "rank": "pupil",
+      "maxRating": 1156,
+      "__v": 0
+    },
+    "hackerrankStats": {
+      "_id": "69e5b5d1d167aa2acc236794",
+      "username": "user1",
+      "badges": 7,
+      "__v": 0
+    },
+    "scores": {
+      "_id": "69e5b5d2d167aa2acc236798",
+      "total": 188,
+      "leetcode": 345,
+      "codechef": 480,
+      "codeforces": 190,
+      "github": 468,
+      "hackerrank": 8,
+      "__v": 0
+    },
+    "submittedAt": "2026-04-20T05:12:50.279Z",
+    "__v": 0
+  }
+}
