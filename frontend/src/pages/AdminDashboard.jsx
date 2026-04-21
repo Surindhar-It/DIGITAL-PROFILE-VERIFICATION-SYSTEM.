@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import * as XLSX from 'xlsx';
 import { Github, Linkedin, Code, Terminal, Cpu, ExternalLink, BarChart2, ChevronDown, Info, X } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
+import StudentAnalysis from '../components/StudentAnalysis';
 
 const StudentDetailsModal = ({ student, onClose }) => {
     if (!student) return null;
@@ -422,10 +423,11 @@ const AdminDashboard = () => {
 
                 <div className="space-y-4 mb-6">
                     <div className="flex space-x-4">
-                        {['All', 'Pending', 'Verified', 'Rejected', 'Leaderboard'].map(status => {
+                        {['All', 'Pending', 'Verified', 'Rejected', 'Leaderboard', 'Student Details'].map(status => {
                             let count = 0;
                             if (status === 'All') count = students.length;
                             else if (status === 'Leaderboard') count = students.filter(s => s.status === 'Verified').length;
+                            else if (status === 'Student Details') count = undefined; // Don't show count for this tab
                             else count = students.filter(s => s.status === status).length;
 
                             return (
@@ -434,7 +436,7 @@ const AdminDashboard = () => {
                                     onClick={() => setFilter(status)}
                                     className={`px-5 py-2.5 rounded-xl transition font-bold shadow-sm ${filter === status ? 'bg-indigo-600 text-white shadow-indigo-500/30 ring-2 ring-indigo-600 ring-offset-2 ring-offset-white dark:ring-offset-[#131620]' : 'bg-white dark:bg-[#1e293b] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-indigo-600 hover:border-indigo-300'}`}
                                 >
-                                    {status} ({count})
+                                    {status} {count !== undefined && `(${count})`}
                                 </button>
                             );
                         })}
@@ -498,10 +500,13 @@ const AdminDashboard = () => {
                     </div>
                 )}
 
-                <div className="glass-card rounded-3xl overflow-hidden overflow-x-auto bg-white dark:bg-[#131620] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
-                    <table className="w-full text-left">
-                        <thead className="bg-slate-50 dark:bg-[#1e293b] text-slate-800 font-bold dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
-                            <tr>
+                {filter === 'Student Details' ? (
+                    <StudentAnalysis students={students} />
+                ) : (
+                    <div className="glass-card rounded-3xl overflow-hidden overflow-x-auto bg-white dark:bg-[#131620] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-50 dark:bg-[#1e293b] text-slate-800 font-bold dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                                <tr>
                                 {filter === 'Leaderboard' ? (
                                     <>
                                         {leaderboardFilter !== 'GitHub' && <th className="p-4 w-16">Rank</th>}
@@ -697,6 +702,7 @@ const AdminDashboard = () => {
                         </tbody>
                     </table>
                 </div>
+                )}
             </div>
             {/* Student Details Modal */}
             <StudentDetailsModal student={selectedStudent} onClose={() => setSelectedStudent(null)} />
